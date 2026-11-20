@@ -43,6 +43,69 @@ describe('groups', () => {
   });
 });
 
+describe("editor's picks", () => {
+  const section = (block, heading) => {
+    const start = block.indexOf(`### ${heading}`);
+    assert.notEqual(start, -1, `missing section ${heading}`);
+    const next = block.indexOf('\n### ', start + 1);
+    return block.slice(start, next === -1 ? undefined : next);
+  };
+  const cards = (text) => text.split('<td').slice(1).filter((cell) => /SYNTHETIC ITEM \d/.test(cell))
+    .map((cell) => ({ id: `x-10000000000000000${/SYNTHETIC ITEM (\d)/.exec(cell)[1]}`, cell }));
+  const ids = (text) => cards(text).map(({ id }) => id);
+  const cardOf = (text, id) => cards(text).find((card) => card.id === id).cell;
+  const P = (n) => `x-10000000000000000${n}`;
+  const item = (n, overrides) => syntheticPostEntry(n, { title: `SYNTHETIC ITEM ${n}`, ...overrides });
+
+  it('lists picks in their own section first, sorted by id, and marks them in their purpose group', () => {
+    const quotedCover = (n) => ({
+      cover: { motion: 'media/cover.gif', still: 'media/cover.webp' },
+      rights: { assets: [
+        { path: 'media/cover.gif', basis: 'quoted', holder: 'synthetic_user', sourceUrl: `https://x.com/synthetic_user/status/10000000000000000${n}`, excerpt: '0:00-0:01 of the post video' },
+        { path: 'media/cover.webp', basis: 'quoted', holder: 'synthetic_user', sourceUrl: `https://x.com/synthetic_user/status/10000000000000000${n}`, excerpt: 'A still of the post video' },
+      ] },
+      media: [],
+    });
+    const files = { 'media/cover.gif': gifBytes([100]), 'media/cover.webp': webpStill() };
+    const originalCover = (n) => {
+      const quoted = quotedCover(n);
+      return { ...quoted, rights: { assets: quoted.rights.assets.map(({ path }) => ({ path, basis: 'original' })) } };
+    };
+    writeEntry(sandbox.root, item(1, { purposes: ['images'], ...quotedCover(1) }), { files });
+    writeEntry(sandbox.root, item(2, { purposes: ['images'], collection: 'editors-pick', ...originalCover(2) }), { files });
+    writeEntry(sandbox.root, item(3, { purposes: ['images'], collection: 'editors-pick', ...originalCover(3) }), { files });
+    const collection = loadCollection(sandbox.root);
+    assert.deepEqual(collection.errors, []);
+    const block = renderBlock({ ...collection, entries: [...collection.entries].reverse() });
+    const picks = section(block, "★ Editor's Picks (2)");
+    const images = section(block, 'Images (3)');
+    assert.ok(block.indexOf(picks) < block.indexOf(images));
+    assert.deepEqual(ids(picks), [P(2), P(3)]);
+    assert.deepEqual(ids(images), [P(1), P(2), P(3)]);
+    for (const text of [picks, images]) for (const id of [P(2), P(3)]) assert.match(cardOf(text, id), /★ Editor's Pick/);
+    assert.doesNotMatch(cardOf(images, P(1)), /Editor's Pick/);
+    assert.match(cardOf(images, P(1)), /via <a href/);
+  });
+
+  it('keeps the released link of a stale pick and gives an undeployed pick none, in both sections', () => {
+    const { entry: stale } = writeEntry(sandbox.root, item(1, { collection: 'editors-pick' }));
+    writeEntry(sandbox.root, item(2, { collection: 'editors-pick' }));
+    writeDeployments([record(stale, { revision: `sha256:${'0'.repeat(64)}` })]);
+    const block = renderBlock(loadCollection(sandbox.root));
+    const label = loadCollection(sandbox.root).purposes.find(({ id }) => id === 'slides').label;
+    for (const text of [section(block, "★ Editor's Picks (2)"), section(block, `${label} (2)`)]) {
+      assert.deepEqual(ids(text), [P(1), P(2)]);
+      assert.ok(cardOf(text, P(1)).includes(inHtml(trackedUrl(P(1), 'market-grid'))));
+      assert.doesNotMatch(cardOf(text, P(2)), /heyatu\.com/);
+    }
+  });
+
+  it('has no picks section without a pick', () => {
+    writeEntry(sandbox.root, syntheticPostEntry(1));
+    assert.doesNotMatch(renderBlock(loadCollection(sandbox.root)), /Editor's Pick/);
+  });
+});
+
 describe('deployment records and links', () => {
   it('has no link without a record', () => {
     const { entry } = writeEntry(sandbox.root, syntheticPostEntry(1));

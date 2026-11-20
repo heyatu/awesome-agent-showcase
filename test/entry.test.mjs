@@ -38,6 +38,21 @@ describe('entry validation', () => {
     assert.equal(errorsFor(syntheticEntry()), '');
   });
 
+  it('accepts the editors-pick collection and rejects any other value', () => {
+    assert.equal(errorsFor(syntheticEntry()), '');
+    assert.equal(errorsFor(syntheticEntry({ collection: 'editors-pick' })), '');
+    for (const collection of ['featured', ['editors-pick'], null]) {
+      assert.match(errorsFor(syntheticEntry({ collection })), /collection must be the string "editors-pick"/);
+    }
+  });
+
+  it('rejects a non-original file in an editors-pick item', () => {
+    const licensed = { path: 'media/cover.png', basis: 'licensed', holder: 'Synthetic Holder', licence: 'CC BY 4.0', licenceUrl: 'https://creativecommons.org/licenses/by/4.0/' };
+    assert.equal(errorsFor(syntheticEntry({ rights: { assets: [licensed] } })), '');
+    assert.match(errorsFor(syntheticEntry({ collection: 'editors-pick', rights: { assets: [licensed] } })), /only files with rights basis original/);
+    assert.match(errorsFor(syntheticEntry({ collection: 'editors-pick', rights: { assets: { some: 1 } } })), /rights.assets must be a list/);
+  });
+
   it('rejects an ID with a bad shape or a bad length', () => {
     for (const id of ['X-1', 'x_1', `x-${'1'.repeat(31)}`]) {
       assert.match(errorsFor(syntheticEntry({ id }), { dir: 'bad-dir' }), /id must be 1 to 32/);

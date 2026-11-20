@@ -44,6 +44,7 @@ Nothing else is allowed in the directory. Symbolic links are rejected. Allowed e
 | `prompts` | Optional, `[{ "choice", "status", "text", "label"?, "testedOn"? }]` |
 | `action` | `{ "label", "prompt" }`. Required when `prompts` is not empty; not allowed without prompts. See below |
 | `cover` | Optional, `{ "motion", "still" }`. See below |
+| `collection` | Optional. `editors-pick` for our own featured items. See below |
 | `made` | Optional, up to 3 of `[{ "path", "kind", "alt", "caption", "creditUrl"?, "still"? }]`: result media for the item. See below |
 | `requirements` | List of text, may be empty |
 | `tags` | Optional, `[{ "kind": "tool" or "model", "name", "version"?, "evidence" }]`. Evidence is a public https URL |
@@ -112,6 +113,14 @@ A page has `path: "page.html"` and a `still` (a static `media/<name>` PNG, JPEG 
 For a recording, `path` is `media/<name>` as `png`, `jpg`, `jpeg`, `webp`, `gif` or `mp4`, at most 2 MB. A `recreation` needs a `quoted` record. Its caption credits the artwork and links to the original through `creditUrl` (public HTTPS). The quoted limits apply. All other kinds need an `original` record and do not take `creditUrl`. `alt` is at most 300 characters. `caption` is at most 160 characters and says what the file shows.
 
 For a new remake, use a 16:9 animated WebP or MP4 with a 6–10 s loop and the Hey Atu logo in the frame. Do not show the prompt or copy the logos, screens or text of another product. Use pixel art only for a post that uses pixel art.
+
+### Collection
+
+`collection` marks an item that the Hey Atu team made and features. The only value is `editors-pick`, for the Aesthetic Remake series: a short episode of ours that rebuilds a project we liked with one prompt.
+
+Only maintainers add `collection: "editors-pick"`, and only to an Aesthetic Remake entry. Before adding it, confirm that the source is our own public post. The validator checks the value and that every stored file has rights basis `original`; it does not check who owns the post.
+
+An `editors-pick` item follows every other rule of this contract. The README lists it in an **Editor's Picks** section above the purpose groups and marks its card "★ Editor's Pick" there and in its purpose group.
 
 ### Cover
 

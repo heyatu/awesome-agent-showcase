@@ -27,6 +27,7 @@ A maintainer checks the material and may ask for changes. The owner checks the s
 - Do not add a tool, model or version tag without a public URL that supports it.
 - Mark a prompt `tested` only after a run in Hey Atu produces the stated result. Use `proposed` for a prompt that you wrote and did not run.
 - Do not add executable files, scripts, HTML (except the reviewed self-contained `made` page), SVG, exports, logs, credentials or machine paths.
+- Do not set `collection`. Maintainers add `editors-pick` to our own Aesthetic Remake entries ([Collection](docs/entry-contract.md#collection)).
 - Give an item that has prompts an `action`. Give both files of a `cover` a rights record.
 - Update the `revision` of an item after every content or asset change. Run `node scripts/validate.mjs --revision <id>` to see the computed value. Then run `node scripts/readme.mjs`.
 - Run `node scripts/validate.mjs`, `node scripts/readme.mjs --check` and `node --test "test/*.test.mjs"` before you open a pull request.

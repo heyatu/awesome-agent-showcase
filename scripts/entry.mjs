@@ -31,7 +31,7 @@ const BRIEF_MIN = 40;
 const BRIEF_MAX = 400;
 const BRIEF_FORBIDDEN = /[<`\p{Cc}\u2028\u2029]|:\/\/|\/\/|www\./iu;
 
-const TOP_LEVEL = ['id', 'title', 'summary', 'brief', 'purposes', 'source', 'rights', 'media', 'prompts', 'action', 'cover', 'made', 'requirements', 'tags', 'revision'];
+const TOP_LEVEL = ['id', 'title', 'summary', 'brief', 'purposes', 'source', 'rights', 'media', 'prompts', 'action', 'cover', 'made', 'collection', 'requirements', 'tags', 'revision'];
 const REQUIRED = ['id', 'title', 'summary', 'purposes', 'source', 'rights', 'media', 'requirements', 'revision'];
 const SOURCE_FIELDS = {
   'x-post': ['type', 'url', 'author', 'credit', 'publishedAt', 'capturedAt'],
@@ -47,6 +47,7 @@ const RIGHTS_FIELDS = {
   permission: ['path', 'basis', 'holder', 'grantedOn'],
   quoted: ['path', 'basis', 'holder', 'sourceUrl', 'excerpt'],
 };
+export const COLLECTIONS = ['editors-pick'];
 const HANDLE_PATTERN = /^[A-Za-z0-9_]{1,15}$/;
 
 export const quotedRights = (entry, path) => entry.rights?.assets?.find((asset) => asset.path === path && asset.basis === 'quoted') ?? null;
@@ -185,6 +186,7 @@ function checkRights(entry, files, errors) {
     else if (seen.has(asset.path)) errors.push(`${where}.path ${asset.path} is repeated`);
     else seen.add(asset.path);
   }
+  if (entry.collection === 'editors-pick' && assets.some((asset) => asset?.basis !== 'original')) errors.push('an editors-pick item stores only files with rights basis original');
   return seen;
 }
 
@@ -326,6 +328,7 @@ function checkFields(entry, purposeIds, errors) {
   checkPrompts(entry, errors);
   checkAction(entry, errors);
   checkTags(entry, errors);
+  if (entry.collection !== undefined && !COLLECTIONS.includes(entry.collection)) errors.push('collection must be the string "editors-pick"');
   return true;
 }
 

@@ -48,6 +48,12 @@ describe('revision in a stored entry', () => {
     assert.match(loadCollection(sandbox.root).errors.join('\n'), /revision is stale/);
   });
 
+  it('goes stale when only the collection changes after sealing', () => {
+    const { base, entry } = writeEntry(sandbox.root, syntheticEntry());
+    writeFileSync(join(base, 'entry.json'), JSON.stringify({ ...entry, collection: 'editors-pick' }));
+    assert.match(loadCollection(sandbox.root).errors.join('\n'), /revision is stale/);
+  });
+
   it('rejects a malformed revision', () => {
     writeEntry(sandbox.root, syntheticEntry({ revision: 'abc123' }), { seal: false });
     assert.match(loadCollection(sandbox.root).errors.join('\n'), /revision must be sha256/);
