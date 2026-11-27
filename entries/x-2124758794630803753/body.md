@@ -1,0 +1,1 @@
+Aesthetic Remake is our own series: each episode takes a project we liked and rebuilds it with one prompt. EP03 remakes [The Folded Atlas](https://x.com/johnlindquist/status/2123569842204897753) by @johnlindquist, an interactive tutorial made to feel like a pop-up book. The trick is to generate the paper art first, then build the 3D site around it.

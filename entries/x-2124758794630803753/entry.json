@@ -1,0 +1,52 @@
+{
+  "id": "x-2124758794630803753",
+  "title": "A 3D pop-up storybook you flip by hand",
+  "summary": "Aesthetic Remake EP03: The Folded Atlas rebuilt with one prompt, a pop-up book you flip by hand.",
+  "brief": "A 3D pop-up storybook in the browser: an open book on a table whose pages you turn by hand while low-poly paper dioramas fold flat and rise again, with paper puppet characters that bob and small hidden tricks to click.",
+  "purposes": [
+    "animation-video",
+    "coding"
+  ],
+  "source": {
+    "type": "x-post",
+    "url": "https://x.com/heyatuapp/status/2124758794630803753",
+    "author": "heyatuapp",
+    "credit": "Hey Atu (@heyatuapp)",
+    "publishedAt": "2026-11-23",
+    "capturedAt": "2026-11-28",
+    "video": "https://video.twimg.com/amplify_video/2124758445341671424/vid/avc1/1280x720/mHfSkYX3NRNdrthv.mp4?tag=14"
+  },
+  "rights": {
+    "assets": [
+      {
+        "path": "media/pop-up-book-cover.webp",
+        "basis": "original"
+      },
+      {
+        "path": "media/pop-up-book-cover-still.webp",
+        "basis": "original"
+      }
+    ]
+  },
+  "media": [],
+  "prompts": [
+    {
+      "choice": "pop-up-storybook",
+      "status": "tested",
+      "text": "Build an interactive 3D pop-up storybook as one web page with three.js: an open book on a dark green table whose paper pages you turn by hand while low-poly paper dioramas fold flat and pop up again.\n\nTwo stages. 1) Art: use image generation for a concept painting of the open book, and a parts sheet on white: each character a flat faceted cut-card puppet with a thick cream border, split into spaced parts (head, eyes, body, feet, tail, paw, prop). Show me both before building. If image generation is unavailable, draw the sheet on a canvas and carry on. 2) Build: cut the sheet into a texture atlas (rect and pivot per part) and rig each character as a puppet of textured cards; heads tilt, tails swish, feet shuffle as they bob. Build all scenery as low-poly geometry in code.\n\nLook: full-window canvas, table #27483f with a dark vignette, warm light from the upper left, soft shadows. Always a book on a table, never a landscape: camera 30° down from the reader's seat, book 95% of window width, far edge at 45% height, page stack, spine, red-brown cover edge and red ribbon visible. Each spread is a hand-coloured map with rounded regions, a dashed path, an italic region name and \"PLATE 0N\". All matte, faceted paper in muted colours (terracotta, mustard #e9b03f, sage, pine, cream #f3e6c4).\n\nFive chapters, one dense diorama per spread (30-50 pieces): paper mountains along the far edge, 6-10 trees, grass, flowers, a cottage, a sun and cloud on paper sticks, and a big landmark centre-right (at least a third of frame height); keep the upper left clear for the title. Pip, an orange fox with a red scarf and green satchel, stands on the near half of every spread, a sixth of frame height, beside an equally big companion.\n1. The Bell Gate (meadow, owl): gatehouse with red roof and flag. Click the bell: it swings and the doors open.\n2. The Rope Bridge (river, frog): timber towers, sagging bridge with a gap, bunting. Click it: missing planks slide in.\n3. The Book House (sandy wood, mouse): library with a giant open book as roof. Click the roof: pages flutter.\n4. The Windmill (wheat, hedgehog miller): stone mill, red cone roof, lattice sails. Drag a sail: it spins and slows with inertia.\n5. The Lighthouse (night, sailor penguin): table turns #1d3437; moon, stars, sea, rocks, striped lighthouse, red sailboat, gulls. Click the red lever: the lamp flashes twice and the boat answers twice.\n\nPage turning is the heart of it. Drag the right page left to go forward, the left page right to go back. The subdivided sheet curls around a moving fold, casts a shadow and shows the next print on its back. Pop-ups fold flat as their page lifts; the next ones spring up with a small overshoot, back pieces slightly later. Release past halfway to finish in about 0.9 s, otherwise it falls back. Dragging the table rotates the book about 25° and eases back.\n\nInterface in a heavy serif (Iowan Old Style or Georgia 800-900, #fbf3dc). Top left: book icon, \"The Paper Island\", letter-spaced \"A POP-UP STORY\". Top right: dark pills \"Reset view\", sound (WebAudio rustle, off by default), \"Map\". Upper left: \"CHAPTER 04 / 05\", a large title (about 64 px), italic region name, gold hint. Bottom left: \"PIP'S JOURNEY\", a story line, \"Read this page\". Bottom right: dark panel with \"DRAG THE PAGE TO TURN\", \"04 / 05\", arrows and a five-dot slider that scrubs the turn continuously. Arrow keys turn pages. \"Read this page\" slides in a cream card: title, short story, \"PIP'S NOTEBOOK\" note, a mustard button that triggers the prop. \"Map\" opens an island map with five numbered pins; clicking one turns there. Each chapter has a hash (#gate, #bridge, #library, #mill, #lighthouse) that works with Back. Story: Pip carries a light to the lighthouse.\n\n60 fps on a laptop, usable on a phone. Build it in a new folder inside the current project folder. Ask me before installing or downloading anything (three.js too); save it in the project for offline use. Open it in the browser and check it works.",
+      "label": "Build the pop-up storybook",
+      "testedOn": "2026-11-23"
+    }
+  ],
+  "action": {
+    "label": "Make a pop-up storybook in Atu",
+    "prompt": "pop-up-storybook"
+  },
+  "cover": {
+    "motion": "media/pop-up-book-cover.webp",
+    "still": "media/pop-up-book-cover-still.webp"
+  },
+  "collection": "editors-pick",
+  "requirements": [],
+  "revision": "sha256:fd181cb5f06ad8d90540536ad69819d7fbac61c50403b154b87e71acf3c4734a"
+}
